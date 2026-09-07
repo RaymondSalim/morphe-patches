@@ -26,6 +26,9 @@ dependencies {
     compileOnly(libs.gson)
     patchListGeneratorClasspath(libs.gson)
     testImplementation(kotlin("test"))
+    // The patcher publishes its transitive dependencies as runtime-scope, so
+    // tests calling Patcher() need coroutines on the compile classpath.
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 tasks {
