@@ -54,4 +54,41 @@ class PaywallModGoldenTest {
             // expected
         }
     }
+
+    @Test
+    fun supportsHevy3_1_12() {
+        val bundlePath = System.getenv("HEVY_TEST_BUNDLE_3_1_12")
+        Assume.assumeTrue("HEVY_TEST_BUNDLE_3_1_12 not set", bundlePath != null)
+
+        val data = File(bundlePath!!).readBytes()
+        val applied = PaywallMod.apply(data)
+        assertEquals(3, applied)
+
+        // Offsets and bytes verified by disassembling the 3.1.12 bundle:
+        // site 1: LoadConstFalse -> LoadConstTrue in the is_pro store
+        // site 2: LoadParam+GetEnvironment (6-byte) prologue -> LoadConstTrue r0; Ret r0
+        // site 3: terminal LoadConstFalse -> LoadConstTrue in the grace getter tail
+        val expectedEdits = mapOf(
+            0x11AD8DE to (0x79 to 0x78),
+            0x11AD944 to (0x6C to 0x78),
+            0x11AD946 to (0x00 to 0x5C),
+            0x11AD947 to (0x29 to 0x00),
+            0x11AD949 to (0x01 to 0x00),
+            0x11ADB93 to (0x79 to 0x78),
+        )
+        val original = File(bundlePath).readBytes()
+        for ((offset, change) in expectedEdits) {
+            val (before, after) = change
+            assertEquals(before.toInt(), original[offset].toInt() and 0xFF, "pre-patch byte at 0x${offset.toString(16)}")
+            assertEquals(after, data[offset].toInt() and 0xFF, "post-patch byte at 0x${offset.toString(16)}")
+        }
+        // Site 2's Ret register operand (0x01) happened to match the original
+        // GetEnvironment environment index, so that byte is intentionally
+        // unchanged.
+        assertEquals(0x01, data[0x11AD948].toInt() and 0xFF, "post-patch byte at 0x11ad948")
+
+        val digest = MessageDigest.getInstance("SHA-1")
+            .digest(data.copyOfRange(0, data.size - 20))
+        assertContentEquals(digest, data.copyOfRange(data.size - 20, data.size))
+    }
 }

@@ -11,6 +11,7 @@ object Constants {
         apkFileType = ApkFileType.APKM,
         appIconColor = 0x1C1C1E, // Dark background of the Hevy launcher icon.
         targets = listOf(
+            AppTarget(version = "3.1.12"),
             AppTarget(version = "3.0.11")
         )
     )
@@ -21,6 +22,7 @@ object Constants {
         apkFileType = ApkFileType.APK,
         appIconColor = 0x1C1C1E,
         targets = listOf(
+            AppTarget(version = "3.1.12"),
             AppTarget(version = "3.0.11")
         )
     )
