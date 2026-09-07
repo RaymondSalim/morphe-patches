@@ -36,12 +36,13 @@
 
 ## Prerequisites (before Task 1)
 
-- [ ] **P1: Registry credentials.** Ask the user for a GitHub PAT, then either write it to `~/.gradle/gradle.properties`:
+- [ ] **P1: Registry credentials.** The gh CLI token is used directly for Gradle: `GITHUB_TOKEN=$(gh auth token) GITHUB_ACTOR=$(gh api user --jq .login)`. Requires the gh session to have the `read:packages` scope; if `gh auth status` does not list it, run `gh auth refresh -h github.com -s read:packages` once (user confirms a device code in the browser). Verify resolution:
+  ```bash
+  GITHUB_TOKEN=$(gh auth token) GITHUB_ACTOR=RaymondSalim \
+  JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home \
+    ./gradlew help --no-daemon
   ```
-  gpr.user=<github-username>
-  gpr.key=<pat-with-read-packages>
-  ```
-  or export `GITHUB_ACTOR`/`GITHUB_TOKEN` in every shell that runs Gradle. Verify resolution: `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ./gradlew help` (in the repo). Expected: BUILD SUCCESSFUL.
+  Expected: BUILD SUCCESSFUL. (A classic PAT with `read:packages` in `~/.gradle/gradle.properties` as `gpr.user`/`gpr.key` is the fallback if the OAuth route fails.)
 - [ ] **P2: gh CLI auth.** `gh auth status` must be authenticated for `RaymondSalim` (needed in Task 8).
 
 ---
