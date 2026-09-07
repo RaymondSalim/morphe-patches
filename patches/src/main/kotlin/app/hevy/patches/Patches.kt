@@ -1,5 +1,9 @@
 package app.hevy.patches
 
-import app.morphe.patcher.patch.Patch
+import app.hevy.patches.hermespaywall.hermesPaywallPatch
+import app.hevy.patches.packagerename.packageRenamePatch
 
-val allPatches = listOf<Patch<*>>()
+val allPatches = listOf(
+    packageRenamePatch,
+    hermesPaywallPatch,
+)
