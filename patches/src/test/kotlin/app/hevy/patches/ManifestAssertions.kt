@@ -59,6 +59,21 @@ object ManifestAssertions {
         assertEquals("com.hevy.MainApplication", application.getAttribute("android:name"))
     }
 
+    fun assertRenamedAppName(stringsXmlFile: File, expectedAppName: String) {
+        val document: Document = DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(stringsXmlFile)
+        val nodes = document.getElementsByTagName("string")
+        val appNames = ArrayList<String>(nodes.length)
+        for (i in 0 until nodes.length) {
+            val node = nodes.item(i) as Element
+            if (node.getAttribute("name") == "app_name") {
+                appNames.add(node.textContent)
+            }
+        }
+        assertEquals(listOf(expectedAppName), appNames, "Launcher app_name string")
+    }
+
     private fun collectAttributes(document: Document, tag: String, attribute: String): List<String> {
         val nodes = document.getElementsByTagName(tag)
         val values = ArrayList<String>(nodes.length)

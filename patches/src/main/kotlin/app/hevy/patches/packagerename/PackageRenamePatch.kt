@@ -1,15 +1,18 @@
 package app.hevy.patches.packagerename
 
 import app.hevy.patches.shared.Constants
+import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.patch.stringOption
 import org.w3c.dom.Element
 
 private const val ORIGINAL_PACKAGE = "com.hevy"
+private const val ORIGINAL_APP_NAME = "Hevy"
+private const val APP_NAME_RESOURCE = "app_name"
 
 val packageRenamePatch = resourcePatch(
-    name = "Package rename",
-    description = "Renames the app package so the patched app can be installed alongside the original Hevy app.",
+    name = "Rename package & app name",
+    description = "Renames the app package so the patched app can be installed alongside the original Hevy app, and lets you change the app's launcher name.",
     default = true,
 ) {
     val packageNameOption = stringOption(
@@ -24,7 +27,19 @@ val packageRenamePatch = resourcePatch(
         },
     )
 
+    val appNameOption = stringOption(
+        key = "app-name",
+        default = "Hevý",
+        values = null,
+        title = "App name",
+        description = "The launcher name of the patched app.",
+        required = true,
+        validator = { value -> !value.isNullOrBlank() },
+    )
+
     compatibleWith(Constants.COMPATIBILITY_HEVY_APKM, Constants.COMPATIBILITY_HEVY_APK)
+
+    dependsOn(preserveAppCode)
 
     execute {
         // The option is required and its default is non-null, so a value is
@@ -34,6 +49,9 @@ val packageRenamePatch = resourcePatch(
         }
         check(packageName != ORIGINAL_PACKAGE) {
             "Package name must differ from $ORIGINAL_PACKAGE"
+        }
+        val appName = checkNotNull(appNameOption.value) {
+            "The app name option must be set"
         }
 
         // Only the manifest attributes that must stay unique per install are
@@ -82,6 +100,23 @@ val packageRenamePatch = resourcePatch(
             }
         }
 
-        println("Package rename: renamed $ORIGINAL_PACKAGE to $packageName")
+        // The launcher label resolves to the app_name string; widget labels
+        // use their own strings and keep the stock names.
+        document("res/values/strings.xml").use { strings ->
+            val stringNodes = strings.getElementsByTagName("string")
+            var appNodeCount = 0
+            for (i in 0 until stringNodes.length) {
+                val node = stringNodes.item(i) as Element
+                if (node.getAttribute("name") == APP_NAME_RESOURCE) {
+                    node.textContent = appName
+                    appNodeCount++
+                }
+            }
+            check(appNodeCount == 1) {
+                "Expected exactly one $APP_NAME_RESOURCE string, found $appNodeCount"
+            }
+        }
+
+        println("Package rename: renamed $ORIGINAL_PACKAGE to $packageName, app name to $appName")
     }
 }
