@@ -1,3 +1,9 @@
+## [1.1.0-dev.1](https://github.com/RaymondSalim/morphe-patches/compare/v1.0.0...v1.1.0-dev.1) (2026-09-07)
+
+### ✨ New Features
+
+* Added app name option ([ebf60bb](https://github.com/RaymondSalim/morphe-patches/commit/ebf60bbb26a924975d1d4a876e17ccf814dac37c))
+
 ## 1.0.0 (2026-09-07)
 
 ### ✨ New Features
