@@ -1,3 +1,9 @@
+## [1.2.0-dev.1](https://github.com/RaymondSalim/morphe-patches/compare/v1.1.0...v1.2.0-dev.1) (2026-09-07)
+
+### ✨ New Features
+
+* Support Hevy 3.1.12 ([f54c9d8](https://github.com/RaymondSalim/morphe-patches/commit/f54c9d83555e4ff4d7668da3621941ce5472e4ec))
+
 ## [1.1.0](https://github.com/RaymondSalim/morphe-patches/compare/v1.0.0...v1.1.0) (2026-09-07)
 
 ### ✨ New Features
