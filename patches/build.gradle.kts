@@ -1,14 +1,13 @@
-group = "app.template"
+group = "app.hevy"
 
 patches {
-    // TODO: Update this section with your project details.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
+        name = "Hevy Pro Patches"
+        description = "Patches for Hevy - Gym Log Workout Tracker"
+        source = "https://github.com/RaymondSalim/morphe-patches"
+        author = "RaymondSalim"
+        contact = "https://github.com/RaymondSalim"
+        website = "https://github.com/RaymondSalim/morphe-patches"
         license = "GPLv3"
     }
 }
