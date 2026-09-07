@@ -17,7 +17,7 @@ Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro featur
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.1.0-dev.1](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.1.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
 <details open>
 <summary>📦 Hevy - Gym Log Workout Tracker&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -29,8 +29,8 @@ Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro featur
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Hermes paywall bypass](#hermes-paywall-bypass) | Forces Hevy Pro features to be unlocked by patching the React Native Hermes bytecode bundle. |  |
-| [Package rename](#package-rename) | Renames the app package so the patched app can be installed alongside the original Hevy app. | • Package name |
+| [Rename package & app name](#rename-package-app-name) | Renames the app package so the patched app can be installed alongside the original Hevy app, and lets you change the app's launcher name. | • Package name<br>• App name |
+| [Unlock Pro Features](#unlock-pro-features) | Enable pro subscription features |  |
 
 </details>
 

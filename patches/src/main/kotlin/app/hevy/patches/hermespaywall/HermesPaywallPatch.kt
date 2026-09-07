@@ -2,14 +2,17 @@ package app.hevy.patches.hermespaywall
 
 import app.hevy.patches.hermespaywall.hermes.PaywallMod
 import app.hevy.patches.shared.Constants
+import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
 val hermesPaywallPatch = rawResourcePatch(
-    name = "Hermes paywall bypass",
-    description = "Forces Hevy Pro features to be unlocked by patching the React Native Hermes bytecode bundle.",
+    name = "Unlock Pro Features",
+    description = "Enable pro subscription features",
     default = true,
 ) {
     compatibleWith(Constants.COMPATIBILITY_HEVY_APKM, Constants.COMPATIBILITY_HEVY_APK)
+
+    dependsOn(preserveAppCode)
 
     execute {
         val bundleFile = get("assets/index.android.bundle")

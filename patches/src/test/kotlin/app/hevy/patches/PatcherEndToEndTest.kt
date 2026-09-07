@@ -6,6 +6,7 @@ import app.morphe.patcher.PatcherConfig
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 import kotlin.test.fail
 import kotlinx.coroutines.runBlocking
 import org.junit.Assume
@@ -51,14 +52,36 @@ class PatcherEndToEndTest {
             )
             assertContentEquals(expectedBundle, patchedBundle.readBytes())
 
-            // 2. Stage the compiled resources for the manifest assertion.
+            // 2. The patch result must carry the app's dex code. A bundle
+            //    without any bytecode patch makes the patcher compile an
+            //    empty dex set, and an APK without classes.dex fails to
+            //    install with INSTALL_FAILED_INVALID_APK.
+            val originalDexNames = File(apkPath).inputStream().use { stream ->
+                java.util.zip.ZipInputStream(stream.buffered()).use { zip ->
+                    generateSequence(zip.nextEntry) { zip.nextEntry }
+                        .map { it.name }
+                        .filter { it.matches(Regex("classes\\d*\\.dex")) }
+                        .toList()
+                }
+            }
+            val resultDexNames = patcherResult.dexFiles.map { it.name }.toSet()
+            assertEquals(
+                originalDexNames.size,
+                resultDexNames.size,
+                "Expected ${originalDexNames.size} dex files in patch result, got $resultDexNames",
+            )
+            for (dexName in originalDexNames) {
+                assertEquals(true, dexName in resultDexNames, "Missing dex file in patch result: $dexName")
+            }
+
+            // 3. Stage the compiled resources for the manifest assertion.
             val resourcesApk = patcherResult.resources.resourcesApk
                 ?: fail("Expected compiled resources APK")
             val staged = outputDir.resolve("resources.apk")
             resourcesApk.copyTo(staged, overwrite = true)
         }
 
-        // 3. Decode the compiled resources and assert the renamed manifest.
+        // 4. Decode the compiled resources and assert the renamed manifest.
         val decodedDir = outputDir.resolve("decoded")
         val process = ProcessBuilder(
             "apktool", "d", "-f", "-s",
@@ -69,6 +92,10 @@ class PatcherEndToEndTest {
         check(process.waitFor() == 0) { "apktool failed:\n$apktoolOutput" }
 
         ManifestAssertions.assertRenamedManifest(decodedDir.resolve("AndroidManifest.xml"))
+        ManifestAssertions.assertRenamedAppName(
+            decodedDir.resolve("res/values/strings.xml"),
+            expectedAppName = "Hevý",
+        )
     }
 
     private fun findFile(roots: List<File>, name: String): File {
