@@ -22,10 +22,10 @@ The manual mod (`work/original_apktool` vs `work/modded_apktool`) is exactly:
    Google permissions with `com.hevy.mod_`; that is a defect we do NOT
    replicate. `android:supportsRtl` loss is an editing artifact, also not
    replicated.)
-2. `assets/index.android.bundle` (Hermes bytecode v96, magic `0xC61FBC03`,
-   version `0xC103191F`): 5 changed bytes at 3 sites. Opcodes (v96,
-   little-endian): `0x78` LoadConstTrue, `0x79` LoadConstFalse, `0x5c` Ret,
-   `0x7c` LoadThisNS, `0x29` GetEnvironment.
+2. `assets/index.android.bundle` (Hermes bytecode, u64 magic `0x1F1903C103BC1FC6`
+   stored little-endian, bytecode version 96 at header offset 8): 5 changed bytes
+   at 3 sites. Opcodes (v96, little-endian): `0x78` LoadConstTrue, `0x79`
+   LoadConstFalse, `0x5c` Ret, `0x7c` LoadThisNS, `0x29` GetEnvironment.
 
 | # | Function (identified by string refs) | Original bytes | Modded bytes | Effect |
 |---|--------------------------------------|----------------|--------------|--------|

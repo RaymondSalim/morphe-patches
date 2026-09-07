@@ -1,5 +1,102 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "0.0.0",
-  "patches": []
+  "version": "1.0.0-dev.1",
+  "patches": [
+    {
+      "name": "Hermes paywall bypass",
+      "description": "Forces Hevy Pro features to be unlocked by patching the React Native Hermes bytecode bundle.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.hevy",
+          "name": "Hevy - Gym Log Workout Tracker",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#1C1C1E",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.0.11",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.hevy",
+          "name": "Hevy - Gym Log Workout Tracker",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#1C1C1E",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.0.11",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Package rename",
+      "description": "Renames the app package so the patched app can be installed alongside the original Hevy app.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.hevy",
+          "name": "Hevy - Gym Log Workout Tracker",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#1C1C1E",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.0.11",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.hevy",
+          "name": "Hevy - Gym Log Workout Tracker",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#1C1C1E",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "3.0.11",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "package-name",
+          "title": "Package name",
+          "description": "The new package name of the patched app. It must differ from the original package name.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "com.hevy.mod",
+          "values": null
+        }
+      ]
+    }
+  ]
 }
