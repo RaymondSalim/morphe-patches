@@ -263,12 +263,17 @@ assert n == 1, 'signature must match exactly once, got %d' % n
 - [ ] **Step 7: Import libil2cpp.so into Ghidra (no auto-analysis)**
 
 ```bash
-GHIDRA=$(ls -d /Applications/ghidra* | head -1)
-"$GHIDRA/support/analyzeHeadless" apk/re/ghidra-project castle \
+GHIDRA=/opt/homebrew/opt/ghidra/libexec   # brew formula install; the ghidra cask no longer exists
+mkdir -p apk/re/ghidra-project            # analyzeHeadless refuses to create a missing project dir
+# Ghidra needs JDK 21; jenv's shell hook forces JAVA_HOME to its java 19, so bypass it:
+env -u JAVA_HOME PATH="/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home/bin:$PATH" \
+  "$GHIDRA/support/analyzeHeadless" apk/re/ghidra-project castle \
   -import apk/re/inputs/libil2cpp.so -noanalysis
 ```
 
 Expected: import completes (this can take several minutes; no analysis pass). Address mapping check: for a known method, pick the `Offset` (file offset) from `dump.cs`, read 16 bytes at that file offset, then read the same bytes at the Ghidra address equal to that offset; if they differ, use the method's `VA` value instead and re-check. Record the mapping decision (used by all disassembly steps).
+
+**Confirmed mapping for this machine (verified during Task 2 execution):** Ghidra rebases the ELF to image base `0x00100000` at import, so **Ghidra address = dump.cs `VA` + `0x100000`** (equivalently `Offset + 0x104000`, since VA = Offset + 0x4000 on the text segment). Reads at the raw `Offset` or raw `VA` return zeros. Cross-checked with `PopulatePlayersPredictionTrajectories` (VA `0x43A4138`): the 16 file bytes at offset `0x43A0138` equal the Ghidra bytes at `0x44A4138`, and disassembling `0x44A4138` yields the method's prologue (it reads `[x19,#0x28]`, matching `maxArtilleryAngle` at field offset 0x28).
 
 - [ ] **Step 8: Commit the tool script**
 
@@ -839,14 +844,14 @@ Also enumerate the C# callers: search dump.cs for the classes that hold these ob
 
 - [ ] **Step 3: Disassemble each candidate**
 
-For each candidate, from its `Offset`/`VA` (mapping verified in Task 2 Step 7):
+For each candidate, from its `Offset`/`VA`: convert to the Ghidra address first — **Ghidra address = `VA` + `0x100000`** (mapping confirmed in Task 2 Step 7). Ghidra 12 removed Jython, so `analyzeHeadless -postScript <script>.py` cannot run Python scripts; the validated runtime is PyGhidra, with a venv at `apk/re/pyghidra-venv` (created offline in Task 2; if missing, recreate with `python3 -m venv apk/re/pyghidra-venv && apk/re/pyghidra-venv/bin/pip install --no-index -f /opt/homebrew/opt/ghidra/libexec/Ghidra/Features/PyGhidra/pypkg/dist pyghidra`). The invocation below reuses the already-imported program in project `castle` (no re-import; the first call pays roughly a minute of JVM startup and program-open time). `$PWD` and `env -u JAVA_HOME` matter: Ghidra's project locator requires absolute paths, and jenv's shell hook pins `JAVA_HOME` to java 19 while Ghidra needs 21.
 
 ```bash
-GHIDRA=$(ls -d /Applications/ghidra* | head -1)
-"$GHIDRA/support/analyzeHeadless" apk/re/ghidra-project castle \
-  -process libil2cpp.so -noanalysis \
-  -scriptPath apk/re/scripts -postScript disasm_range.py <START> <LEN>
+env -u JAVA_HOME PATH="/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home/bin:$PATH" \
+apk/re/pyghidra-venv/bin/python -c "import pyghidra; pyghidra.start(install_dir='/opt/homebrew/opt/ghidra/libexec'); pyghidra.run_script('$PWD/apk/re/inputs/libil2cpp.so', 'tools/ghidra/disasm_range.py', project_location='$PWD/apk/re/ghidra-project', project_name='castle', script_args=['<GHIDRA_ADDR>', '<LEN_HEX>'], nested_project_location=False, analyze=False)"
 ```
+
+(`nested_project_location=False` is required because analyzeHeadless created the project with the non-nested layout; the pyghidra CLI cannot pass this flag and would silently create a second, nested project and re-import the 160 MB binary.)
 
 Start at the method entry (or slightly before) with `LEN` 0x200-0x600; extend as needed to understand the function.
 
