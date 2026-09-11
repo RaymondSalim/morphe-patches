@@ -43,7 +43,7 @@
 
 - [ ] **Step 1: Obtain input APK**
 
-Preferred: ask the user for the clean APK/APKM of Castle Busters 1.17.2 and set `CC_TEST_APK`.
+`CC_TEST_APK` must be a **plain APK** (tests read entries with `ZipFile`; an APKM nests multiple APKs and will not work). Preferred: ask the user for a clean APK of Castle Busters 1.17.2 and set `CC_TEST_APK`. If the user only has an APKM, extract its base APK first (`unzip app.apkm` produces `base.apk` plus config splits; use the base with `lib/arm64-v8a/libil2cpp.so` present, or the merged output of the fallback below).
 
 Fallback (only if user APK not yet available): merge the staged splits with APKEditor.
 
@@ -535,23 +535,22 @@ import kotlin.test.assertTrue
 
 class Arm64PatcherTest {
 
+    // Default site: the patch window (expected bytes) sits inside the
+    // signature window, which is how RE-derived sites are authored.
     private fun site(
-        signature: ByteArray = hex("AA BB CC DD EE FF 11 22"),
+        signature: ByteArray = hex("AA BB CC DD 10 20 30 40 99 88 77 66"),
         patchOffset: Int = 4,
         expected: ByteArray = hex("10 20 30 40"),
         replacement: ByteArray = hex("1F 20 03 D5"),
     ) = NativeSite("test site", "synthetic", signature, patchOffset, expected, replacement)
 
-    private fun buffer(vararg plant: Pair<Int, ByteArray>): ByteArray {
-        val data = ByteArray(64) { it.toByte() }
-        for ((offset, bytes) in plant) bytes.copyInto(data, offset)
-        return data
-    }
+    private fun buffer(): ByteArray = ByteArray(64) { it.toByte() }
 
+    // Plants the signature, which already contains the expected bytes at
+    // patchOffset, exactly like a real patched binary would sit.
     private fun build(offset: Int, s: NativeSite): ByteArray {
         val data = buffer()
         s.signature.copyInto(data, offset)
-        s.expectedBytes.copyInto(data, offset + s.patchOffset)
         return data
     }
 
@@ -596,9 +595,18 @@ class Arm64PatcherTest {
 
     @Test
     fun throwsWhenExpectedBytesDoNotMatch() {
-        val s = site(expected = hex("10 20 30 40"), replacement = hex("1F 20 03 D5"))
+        // Window outside the signature: corrupting it must not disturb the
+        // signature match, isolating the expected-bytes assertion.
+        val s = NativeSite(
+            "test site", "synthetic",
+            signature = hex("AA BB CC DD EE FF 11 22"),
+            patchOffset = 8,
+            expectedBytes = hex("10 20 30 40"),
+            replacementBytes = hex("1F 20 03 D5"),
+        )
         val data = build(16, s)
-        data[16 + s.patchOffset] = 0x7F // corrupt one expected byte
+        hex("10 20 30 40").copyInto(data, 16 + s.patchOffset)
+        data[16 + s.patchOffset + 1] = 0x7F // corrupt one expected byte
         val file = File.createTempFile("arm64", ".bin")
         try {
             file.writeBytes(data)
