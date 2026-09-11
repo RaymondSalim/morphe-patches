@@ -6,9 +6,14 @@ package app.epicoro.castleclashers.patches.native
 // Rows were verified against the 1.17.2 binary; the unit tests re-verify
 // signature uniqueness and expected bytes on every run.
 //
-// Patches are placed at wrapper level (Voodoo.Sauce.Internal.Ads.Interstitial
-// and ...Ads.Banner), which covers both real mediation adapters compiled into
-// the binary (AdnAdsAdapter, MaxMediationAdapter) and FakeMediationAdapter.
+// Patches are placed at wrapper level (Voodoo.Sauce.Internal.Ads.Interstitial,
+// ...Ads.Banner and ...Ads.AppOpen), which covers both real mediation adapters
+// compiled into the binary (AdnAdsAdapter, MaxMediationAdapter) and
+// FakeMediationAdapter.
+// Rewarded formats are untouched: RewardedVideo and RewardedInterstitialVideo
+// have their own wrappers, and the adapter-level rewarded-replacement entry
+// (ShowInterstitial(isInterstitialShownInsteadOfRewarded)) is bypassed entirely
+// because the patched gates sit above it.
 //
 // CodeHash determination (ACTk Genuine, CodeStage.AntiCheat.Genuine.CodeHash):
 // present but never started, therefore not enforced. Evidence:
@@ -109,6 +114,29 @@ val adsSites = listOf(
         ),
         patchOffset = 0,
         expectedBytes = hex("08 20 40 B9 1F 15 00 71"),
+        replacementBytes = hex("00 00 80 52 C0 03 5F D6"),
+    ),
+    NativeSite(
+        name = "ads.appOpen.canShow",
+        description = "Voodoo.Sauce.Internal.Ads.AppOpen.CanShow(bool): app-open display " +
+            "gate. Patched to always return AppOpen.InternalAdState.CAN_NOT_SHOW (0), the same " +
+            "value the unpatched function returns on its paid hide-ads and " +
+            "conditions-not-met paths. Contract: AppOpen.Show (VA 0x4197D14) calls CanShow " +
+            "first (bl at VA 0x4297DD0) and, for any status other than CAN_SHOW(1), skips the " +
+            "adapter show path, invokes the onComplete Action when one was supplied (call at " +
+            "VA 0x42981E4, skipped for null at VA 0x42981B8) and returns, so the resume-time " +
+            "call from AdsManager.OnApplicationPause (VA 0x4185C74, tail-call " +
+            "Show(appOpen, onComplete=null, ignoreConditions=false) at VA 0x4185DAC) becomes a " +
+            "no-op in a fire-and-forget lifecycle callback, and the Voodoo debug screen's " +
+            "ShowAppOpenAdInfo lambdas (VA 0x425B504) complete normally. Direct-call scan: " +
+            "CanShow is called only from AppOpen.Show; no rewarded-flow caller exists " +
+            "(RewardedVideo.Show has its own gate, VA 0x41A1120).",
+        signature = hex(
+            "FE 57 BE A9 F4 4F 01 A9 55 BB 02 B0 F4 03 01 2A " +
+                "F3 03 00 AA A8 22 69 39 A8 02 00 37 A0 8B 02 B0 00 10 44 F9",
+        ),
+        patchOffset = 0,
+        expectedBytes = hex("FE 57 BE A9 F4 4F 01 A9"),
         replacementBytes = hex("00 00 80 52 C0 03 5F D6"),
     ),
 )
