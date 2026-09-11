@@ -116,6 +116,10 @@ gradle-app.setting
 # Potentially copyrighted test APK
 *.apk
 
+# Local staging dir for APKs and reverse-engineering artifacts
+# (extracted libs, metadata, dumps) - never committed
+apk/
+
 # Ignore vscode config
 .vscode/
 
