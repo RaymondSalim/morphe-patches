@@ -1,10 +1,10 @@
-# 🔋 Hevy Pro Patches
+# 🧩 Morphe Patches
 
-Morphe compatible patches for Hevy - Gym Log Workout Tracker (com.hevy).
+Morphe compatible patches for Hevy - Gym Log Workout Tracker (com.hevy) and Castle Busters (com.epicoro.castleclashers).
 
 ## ❓ About
 
-Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro features of the Hevy workout tracking app and renames the app so the patched version can be installed alongside the original.
+Morphe Patches is a Morphe compatible patch bundle for the Hevy workout tracking app (Pro feature unlock) and the Castle Busters game (ads block, aim guide). Patched apps are renamed so they can be installed alongside the originals.
 
 ### How to use these patches
 
@@ -49,4 +49,4 @@ Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro featur
 
 ## 📜 License
 
-Hevy Pro Patches are licensed under the [GNU General Public License v3.0](LICENSE)
+Morphe Patches are licensed under the [GNU General Public License v3.0](LICENSE)

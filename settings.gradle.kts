@@ -1,4 +1,4 @@
-rootProject.name = "hevy-pro-patches"
+rootProject.name = "morphe-patches"
 
 pluginManagement {
     repositories {

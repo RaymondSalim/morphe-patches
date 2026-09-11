@@ -2,8 +2,8 @@ group = "app.hevy"
 
 patches {
     about {
-        name = "Hevy Pro Patches"
-        description = "Patches for Hevy - Gym Log Workout Tracker"
+        name = "Morphe Patches"
+        description = "Patches for Hevy (Pro unlock) and Castle Busters (ads block, aim guide)"
         source = "https://github.com/RaymondSalim/morphe-patches"
         author = "RaymondSalim"
         contact = "https://github.com/RaymondSalim"
