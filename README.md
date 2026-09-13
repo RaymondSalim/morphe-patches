@@ -14,6 +14,21 @@ Morphe Patches is a Morphe compatible patch bundle for the Hevy workout tracking
 4. In Morphe Manager, select the patches and patch the app.
 5. Install the patched app alongside the original.
 
+### How to patch Castle Busters
+
+1. Install [Morphe Manager](https://morphe.software/).
+2. Click [this link](https://morphe.software/add-source?github=RaymondSalim/morphe-patches) to add these patches to Morphe Manager.
+3. Get Castle Busters **1.17.2** as an APK or APKM from [APKMirror](https://www.apkmirror.com/apk/voodoo/castle-clashers/castle-busters-1-17-2-release/). APKMirror also hosts newer versions of the game.
+4. In Morphe Manager, select the Castle Busters app, keep all three patches selected, and patch the app.
+5. Install the patched game alongside the original. With default options it installs as **Castle Bustërs**.
+
+All three patches are selected by default, and the ads block and aim guide patches can be toggled independently in Morphe Manager:
+
+- **Block ads (banner & interstitial)** stops banner and interstitial ads from loading and displaying. Rewarded ads still play and still grant their in-game rewards, by design.
+- **Extend aim guide** shows the full projectile trajectory while aiming, running all the way to ground contact and straight past enemy bases and walls.
+
+The patches are version-locked to Castle Busters 1.17.2 and fail loudly on any other version, so a future game update needs new patch sites before it can be patched again.
+
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
