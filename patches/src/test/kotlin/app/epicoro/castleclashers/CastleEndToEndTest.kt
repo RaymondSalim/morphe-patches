@@ -8,6 +8,7 @@ import app.epicoro.castleclashers.patches.native.codeHashSites
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
 import java.io.File
+import java.security.MessageDigest
 import java.util.zip.ZipFile
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.test.Test
@@ -46,8 +47,22 @@ class CastleEndToEndTest {
             }
             val result = patcher.get()
 
-            val originalDex = zipEntryNames(inputApk).filter { it.matches(Regex("classes\\d*\\.dex")) }
-            assertEquals(originalDex.size, result.dexFiles.size, "dex passthrough count")
+            // The patch result must carry every dex file of the input. The
+            // patcher renumbers multi-dex files (its content-to-name pairing
+            // is not preserved), so the byte-level check compares the sha1
+            // multiset of the dex contents rather than per-name checksums;
+            // it still rejects lost, duplicated or foreign dex content.
+            val originalDexSha1s = zipDexSha1s(inputApk)
+            assertEquals(
+                originalDexSha1s.keys,
+                result.dexFiles.map { it.name }.toSet(),
+                "dex passthrough names",
+            )
+            assertEquals(
+                originalDexSha1s.values.sorted(),
+                result.dexFiles.map { dexFile -> sha1Hex(dexFile.stream.use { it.readBytes() }) }.sorted(),
+                "dex passthrough contents",
+            )
 
             val resourcesApk = result.resources.resourcesApk
                 ?: fail("Expected compiled resources APK")
@@ -157,6 +172,14 @@ class CastleEndToEndTest {
         return (0 until nodes.length).map { (nodes.item(it) as Element).getAttribute(attribute) }
     }
 
-    private fun zipEntryNames(file: File): List<String> =
-        ZipFile(file).use { zf -> zf.entries().toList().map { it.name } }
+    private fun zipDexSha1s(file: File): Map<String, String> = ZipFile(file).use { zf ->
+        zf.entries().toList()
+            .filter { it.name.matches(Regex("classes\\d*\\.dex")) }
+            .associate { entry ->
+                entry.name to sha1Hex(zf.getInputStream(entry).use { stream -> stream.readBytes() })
+            }
+    }
+
+    private fun sha1Hex(bytes: ByteArray): String =
+        MessageDigest.getInstance("SHA-1").digest(bytes).joinToString("") { "%02x".format(it) }
 }
