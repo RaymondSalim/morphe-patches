@@ -1,10 +1,10 @@
-# 🔋 Hevy Pro Patches
+# 🧩 Morphe Patches
 
-Morphe compatible patches for Hevy - Gym Log Workout Tracker (com.hevy).
+Morphe compatible patches for Hevy - Gym Log Workout Tracker (com.hevy) and Castle Busters (com.epicoro.castleclashers).
 
 ## ❓ About
 
-Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro features of the Hevy workout tracking app and renames the app so the patched version can be installed alongside the original.
+Morphe Patches is a Morphe compatible patch bundle for the Hevy workout tracking app (Pro feature unlock) and the Castle Busters game (ads block, aim guide). Patched apps are renamed so they can be installed alongside the originals.
 
 ### How to use these patches
 
@@ -14,10 +14,42 @@ Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro featur
 4. In Morphe Manager, select the patches and patch the app.
 5. Install the patched app alongside the original.
 
+### How to patch Castle Busters
+
+1. Install [Morphe Manager](https://morphe.software/).
+2. Click [this link](https://morphe.software/add-source?github=RaymondSalim/morphe-patches) to add these patches to Morphe Manager.
+3. Get Castle Busters **1.17.2** as an APK or APKM from [APKMirror](https://www.apkmirror.com/apk/voodoo/castle-clashers/castle-busters-1-17-2-release/). APKMirror also hosts newer versions of the game.
+4. In Morphe Manager, select the Castle Busters app, keep all three patches selected, and patch the app.
+5. Install the patched game alongside the original. With default options it installs as **Castle Bustërs**.
+
+All three patches are selected by default, and the ads block and aim guide patches can be toggled independently in Morphe Manager:
+
+- **Block ads (banner, interstitial & app open)** stops banner, interstitial and app-open ads from loading and displaying. Rewarded ads still play and still grant their in-game rewards, by design.
+- **Extend aim guide** shows the full projectile trajectory instead of the short preview; obstacles no longer cut it short.
+
+The patches are version-locked to Castle Busters 1.17.2 and fail loudly on any other version, so a future game update needs new patch sites before it can be patched again.
+
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.3.0-dev.1](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.3.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;5 patches total
+<details open>
+<summary>📦 Castle Busters&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 1.17.2 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Block ads (banner, interstitial & app open)](#block-ads-banner-interstitial-app-open) | Prevents banner, interstitial and app-open ads from loading and displaying. Rewarded ads still work and still grant rewards. |  |
+| [Extend aim guide](#extend-aim-guide) | Shows the full projectile trajectory while aiming instead of the short preview. Obstacles no longer cut the guide short. |  |
+| [Rename package & app name (Castle Busters)](#rename-package-app-name-castle-busters) | Renames the app package so the patched game can be installed alongside the original Castle Busters, and lets you change the app's launcher name. | • Package name<br>• App name |
+
+</details>
+
 <details open>
 <summary>📦 Hevy - Gym Log Workout Tracker&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -49,4 +81,4 @@ Hevy Pro Patches is a Morphe compatible patch bundle that unlocks the Pro featur
 
 ## 📜 License
 
-Hevy Pro Patches are licensed under the [GNU General Public License v3.0](LICENSE)
+Morphe Patches are licensed under the [GNU General Public License v3.0](LICENSE)
