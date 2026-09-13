@@ -2,8 +2,8 @@ package app.epicoro.castleclashers.patches.aimguide
 
 import app.epicoro.castleclashers.patches.native.Arm64Patcher
 import app.epicoro.castleclashers.patches.native.aimGuideSites
-import app.epicoro.castleclashers.patches.native.codeHashSites
 import app.epicoro.castleclashers.patches.shared.Constants
+import app.epicoro.castleclashers.patches.shared.codeHashPatch
 import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
@@ -14,7 +14,7 @@ val aimGuidePatch = rawResourcePatch(
 ) {
     compatibleWith(Constants.COMPATIBILITY_CASTLE_APKM, Constants.COMPATIBILITY_CASTLE_APK)
 
-    dependsOn(preserveAppCode)
+    dependsOn(preserveAppCode, codeHashPatch)
 
     execute {
         for (abi in listOf("armeabi-v7a", "x86", "x86_64")) {
@@ -25,7 +25,7 @@ val aimGuidePatch = rawResourcePatch(
         val so = get("lib/arm64-v8a/libil2cpp.so")
         check(so.exists()) { "lib/arm64-v8a/libil2cpp.so not found in the APK" }
 
-        val logs = Arm64Patcher.applySites(so, aimGuideSites + codeHashSites)
+        val logs = Arm64Patcher.applySites(so, aimGuideSites)
         logs.forEach(::println)
     }
 }

@@ -2,8 +2,8 @@ package app.epicoro.castleclashers.patches.adblock
 
 import app.epicoro.castleclashers.patches.native.Arm64Patcher
 import app.epicoro.castleclashers.patches.native.adsSites
-import app.epicoro.castleclashers.patches.native.codeHashSites
 import app.epicoro.castleclashers.patches.shared.Constants
+import app.epicoro.castleclashers.patches.shared.codeHashPatch
 import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
@@ -14,7 +14,7 @@ val adBlockPatch = rawResourcePatch(
 ) {
     compatibleWith(Constants.COMPATIBILITY_CASTLE_APKM, Constants.COMPATIBILITY_CASTLE_APK)
 
-    dependsOn(preserveAppCode)
+    dependsOn(preserveAppCode, codeHashPatch)
 
     execute {
         // The RE-derived sites only exist in the arm64-v8a library; a
@@ -27,7 +27,7 @@ val adBlockPatch = rawResourcePatch(
         val so = get("lib/arm64-v8a/libil2cpp.so")
         check(so.exists()) { "lib/arm64-v8a/libil2cpp.so not found in the APK" }
 
-        val logs = Arm64Patcher.applySites(so, adsSites + codeHashSites)
+        val logs = Arm64Patcher.applySites(so, adsSites)
         logs.forEach(::println)
     }
 }
