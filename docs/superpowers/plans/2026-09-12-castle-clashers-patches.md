@@ -877,7 +877,7 @@ Expected: `total 1`. If >1, extend the window with more surrounding bytes and re
 
 1. `grep -n 'Genuine.CodeHash\|CodeHashGenerator\|BuildHashes' apk/re/dump/dump.cs` — enumerate the ACTk Genuine classes and their methods.
 2. Search dump.cs for game-side wrappers (class names containing `Integrity`, `CodeHash`, `Tamper`) and VoodooTune config keys containing `integrity`/`codehash` (metadata strings: `strings apk/re/inputs/global-metadata.dat | grep -i ...` or the dump's string literals file).
-3. Find callers: search dump.cs for classes that construct/start these detectors; if inconclusive, locate the `CodeHashGenerator` methods' addresses, disassemble their callers via Ghidra xref (`analyzeHeadless ... -postScript` with a xref script, or full auto-analysis left running in the background overnight given the 160 MB binary — run it if needed, do not skip the determination).
+3. Find callers: search dump.cs for classes that construct/start these detectors; if inconclusive, locate the `CodeHashGenerator` methods' addresses and scan for their callers with the PyGhidra `open_project` API (exhaustive B/BL branch-instruction scan over the loaded program, the `apk/re/scripts/scan_bl.py` approach) or, failing that, full auto-analysis (slow on the 160 MB binary — run it if needed, do not skip the determination).
 4. Write the conclusion into `Sites.kt` as a comment: active-and-enforced (with the detection-event routing evidence) → `codeHashSites` gets a row neutralizing the compare/report path (same procedure: contract first, then bytes, then uniqueness scan); not started or report-only (event goes to a log) → empty list plus the evidence comment.
 
 - [ ] **Step 6: Write `Sites.kt`**
@@ -1241,13 +1241,15 @@ class CastleEndToEndTest {
             (win + site.patchOffset until win + site.patchOffset + site.expectedBytes.size)
                 .forEach { allowed.add(it) }
 
-            val patchedMatch = Arm64Patcher.findMatches(patched, site.signature)
-            assertEquals(1, patchedMatch.size, "site ${site.name} signature in patched")
-            val pStart = patchedMatch[0] + site.patchOffset
-            assertContentEquals(
-                site.replacementBytes,
-                patched.copyOfRange(pStart, pStart + site.replacementBytes.size),
-            )
+            // NOTE: an earlier draft of this block asserted that the site
+            // signature re-matches in the patched .so. That is structurally
+            // impossible for in-signature patch windows: the first patch
+            // destroys the signature it sits in. The shipped test
+            // (CastleEndToEndTest.kt) uses an anchored-window + diff-mask
+            // form instead — replacement bytes at the original match offset,
+            // signature context outside the patch window intact, and no
+            // byte changed outside the declared windows — and that shipped
+            // form is authoritative.
         }
 
         val diffs = originalSo.indices.filter { originalSo[it] != patched[it] }
