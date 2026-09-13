@@ -8,8 +8,8 @@ import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
 val adBlockPatch = rawResourcePatch(
-    name = "Block ads (banner & interstitial)",
-    description = "Prevents banner and interstitial ads from loading and displaying. Rewarded ads still work and still grant rewards.",
+    name = "Block ads (banner, interstitial & app open)",
+    description = "Prevents banner, interstitial and app-open ads from loading and displaying. Rewarded ads still work and still grant rewards.",
     default = true,
 ) {
     compatibleWith(Constants.COMPATIBILITY_CASTLE_APKM, Constants.COMPATIBILITY_CASTLE_APK)

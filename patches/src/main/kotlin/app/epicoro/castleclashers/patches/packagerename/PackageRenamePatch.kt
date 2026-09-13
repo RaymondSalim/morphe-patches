@@ -10,7 +10,7 @@ private const val ORIGINAL_PACKAGE = "com.epicoro.castleclashers"
 private const val APP_NAME_RESOURCE = "app_name"
 
 val packageRenamePatch = resourcePatch(
-    name = "Rename package & app name",
+    name = "Rename package & app name (Castle Busters)",
     description = "Renames the app package so the patched game can be installed alongside the original Castle Busters, and lets you change the app's launcher name.",
     default = true,
 ) {
