@@ -25,7 +25,7 @@ Morphe Patches is a Morphe compatible patch bundle for the Hevy workout tracking
 All three patches are selected by default, and the ads block and aim guide patches can be toggled independently in Morphe Manager:
 
 - **Block ads (banner, interstitial & app open)** stops banner, interstitial and app-open ads from loading and displaying. Rewarded ads still play and still grant their in-game rewards, by design.
-- **Extend aim guide** shows the full projectile trajectory while aiming, running all the way to ground contact and straight past enemy bases and walls.
+- **Extend aim guide** shows the full projectile trajectory instead of the short preview; obstacles no longer cut it short.
 
 The patches are version-locked to Castle Busters 1.17.2 and fail loudly on any other version, so a future game update needs new patch sites before it can be patched again.
 

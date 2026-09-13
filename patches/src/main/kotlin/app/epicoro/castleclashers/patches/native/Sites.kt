@@ -10,10 +10,11 @@ package app.epicoro.castleclashers.patches.native
 // ...Ads.Banner and ...Ads.AppOpen), which covers both real mediation adapters
 // compiled into the binary (AdnAdsAdapter, MaxMediationAdapter) and
 // FakeMediationAdapter.
-// Rewarded formats are untouched: RewardedVideo and RewardedInterstitialVideo
-// have their own wrappers, and the adapter-level rewarded-replacement entry
-// (ShowInterstitial(isInterstitialShownInsteadOfRewarded)) is bypassed entirely
-// because the patched gates sit above it.
+// Rewarded formats are untouched: RewardedVideo.Show dispatches to
+// RewardedInterstitialVideo.Show, a separate wrapper chain that does not
+// pass through any of the patched gates; the interstitial/banner/app-open
+// gates never intercept the rewarded path, so it stays byte-identical by
+// design.
 //
 // CodeHash determination (ACTk Genuine, CodeStage.AntiCheat.Genuine.CodeHash):
 // present but never started, therefore not enforced. Evidence:

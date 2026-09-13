@@ -9,7 +9,7 @@ import app.morphe.patcher.patch.rawResourcePatch
 
 val aimGuidePatch = rawResourcePatch(
     name = "Extend aim guide",
-    description = "Shows the full projectile trajectory while aiming. Obstacles no longer cut the guide short; it runs until ground contact.",
+    description = "Shows the full projectile trajectory while aiming instead of the short preview. Obstacles no longer cut the guide short.",
     default = true,
 ) {
     compatibleWith(Constants.COMPATIBILITY_CASTLE_APKM, Constants.COMPATIBILITY_CASTLE_APK)
