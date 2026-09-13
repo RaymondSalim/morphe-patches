@@ -32,7 +32,24 @@ The patches are version-locked to Castle Busters 1.17.2 and fail loudly on any o
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.3.0-dev.1](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.3.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;5 patches total
+<details open>
+<summary>📦 Castle Busters&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 1.17.2 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Block ads (banner, interstitial & app open)](#block-ads-banner-interstitial-app-open) | Prevents banner, interstitial and app-open ads from loading and displaying. Rewarded ads still work and still grant rewards. |  |
+| [Extend aim guide](#extend-aim-guide) | Shows the full projectile trajectory while aiming instead of the short preview. Obstacles no longer cut the guide short. |  |
+| [Rename package & app name (Castle Busters)](#rename-package-app-name-castle-busters) | Renames the app package so the patched game can be installed alongside the original Castle Busters, and lets you change the app's launcher name. | • Package name<br>• App name |
+
+</details>
+
 <details open>
 <summary>📦 Hevy - Gym Log Workout Tracker&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
