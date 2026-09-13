@@ -142,3 +142,30 @@ val adsSites = listOf(
 )
 
 val codeHashSites = listOf<NativeSite>() // ACTk Genuine CodeHash never starts; evidence in the header comment.
+
+val aimGuideSites = listOf(
+    NativeSite(
+        name = "aim.updateTrajectory.arcCap",
+        description = "ProjectileController.UpdateTrajectory(float) (VA 0x44F765C): the aim guide " +
+            "draw loop clamps and terminates once the accumulated polyline arc exceeds the baked-in " +
+            "constant 4.5f world units (fmov s1,#4.5 at VA 0x44F7B88, fcmp at VA 0x44F7B90, b.gt to " +
+            "the clamp/exit block at VA 0x44F7F68). NOPing the branch removes the cap for every " +
+            "power level; the loop then runs to its only remaining termination, the marker-count " +
+            "bound (i < points.Length at VA 0x44F7B10), drawing the full simulated projectile " +
+            "path through all markers. Contract: the player aim guide (markers at points[], " +
+            "up/down edge SpriteShapeControllers at 0x1B8/0x1C0 and the background band at 0x1C8) " +
+            "always renders to the end of the simulated trajectory; obstacles cannot shorten it " +
+            "because the guide contains no collision logic. Direct-call scan: UpdateTrajectory is " +
+            "called only from ProjectileController.Update (bl at VA 0x44F7088) and " +
+            "ProjectileController.SetAimPreview (bl at VA 0x44FA608), both player aiming UI; the " +
+            "shared trajectory math (GetProjectileForce/GetTrajectorySegments/SimulatePath, used by " +
+            "PopulateEnemyPredictionTrajectories) is untouched.",
+        signature = hex(
+            "47 08 21 1E 01 50 22 1E 08 29 20 1E 00 21 21 1E " +
+                "AC 1E 00 54 68 2A 40 F9",
+        ),
+        patchOffset = 16,
+        expectedBytes = hex("AC 1E 00 54"),
+        replacementBytes = hex("1F 20 03 D5"),
+    ),
+)
