@@ -1,3 +1,9 @@
+## [1.3.1-dev.4](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.1-dev.3...v1.3.1-dev.4) (2026-09-14)
+
+### 🐛 Bug Fixes
+
+* Tune guide simulation step from 0.5s to 0.375s ([a7c5d47](https://github.com/RaymondSalim/morphe-patches/commit/a7c5d470d3eabfe2fd59f6295a1d0e3f0f6ec3bc))
+
 ## [1.3.1-dev.3](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.1-dev.2...v1.3.1-dev.3) (2026-09-14)
 
 ### 🐛 Bug Fixes
