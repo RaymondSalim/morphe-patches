@@ -147,19 +147,20 @@ val codeHashSites = listOf<NativeSite>() // ACTk Genuine CodeHash never starts; 
 val aimGuideSites = listOf(
     NativeSite(
         name = "aim.updateTrajectory.arcCap",
-        description = "ProjectileController.UpdateTrajectory(float) (VA 0x44F765C): the aim guide " +
-            "draw loop clamps and terminates once the accumulated polyline arc exceeds the baked-in " +
-            "constant 4.5f world units (fmov s1,#4.5 at VA 0x44F7B88, fcmp at VA 0x44F7B90, b.gt to " +
-            "the clamp/exit block at VA 0x44F7F68). NOPing the branch removes the cap for every " +
-            "power level; the loop then runs to its only remaining termination, the marker-count " +
-            "bound (i < points.Length at VA 0x44F7B10), drawing the full simulated projectile " +
-            "path through all markers. Contract: the player aim guide (markers at points[], " +
-            "up/down edge SpriteShapeControllers at 0x1B8/0x1C0 and the background band at 0x1C8) " +
-            "always renders to the end of the simulated trajectory; obstacles cannot shorten it " +
-            "because the guide contains no collision logic. Direct-call scan: UpdateTrajectory is " +
-            "called only from ProjectileController.Update (bl at VA 0x44F7088) and " +
-            "ProjectileController.SetAimPreview (bl at VA 0x44FA608), both player aiming UI; the " +
-            "shared trajectory math (GetProjectileForce/GetTrajectorySegments/SimulatePath, used by " +
+        description = "ProjectileController.UpdateTrajectory(float) (VA 0x44F765C): the UNIT-PREVIEW " +
+            "screen aim guide draw loop clamps and terminates once the accumulated polyline arc " +
+            "exceeds the baked-in constant 4.5f world units (fmov s1,#4.5 at VA 0x44F7B88, fcmp at " +
+            "VA 0x44F7B90, b.gt to the clamp/exit block at VA 0x44F7F68). NOPing the branch removes " +
+            "the cap for every power level; the loop then runs to its only remaining termination, " +
+            "the marker-count bound (i < points.Length at VA 0x44F7B10), drawing the full simulated " +
+            "projectile path through all markers. Scope: this function draws the unit-upgrade " +
+            "preview screen guide (markers at points[], up/down edge SpriteShapeControllers at " +
+            "0x1B8/0x1C0, background band at 0x1C8); its only callers are ProjectileController.Update " +
+            "(bl at VA 0x44F7088) and ProjectileController.SetAimPreview (bl at VA 0x44FA608). The " +
+            "IN-BATTLE aim guide is a separate renderer (EnemyAimController.SetTrajectoryDots, see " +
+            "aim.setTrajectoryDots.timeStep). Obstacles cannot shorten either guide because neither " +
+            "contains collision logic; the shared trajectory math " +
+            "(GetProjectileForce/GetTrajectorySegments/SimulatePath, used by " +
             "PopulateEnemyPredictionTrajectories) is untouched.",
         signature = hex(
             "47 08 21 1E 01 50 22 1E 08 29 20 1E 00 21 21 1E " +
@@ -168,5 +169,57 @@ val aimGuideSites = listOf(
         patchOffset = 16,
         expectedBytes = hex("AC 1E 00 54"),
         replacementBytes = hex("1F 20 03 D5"),
+    ),
+    NativeSite(
+        name = "aim.setTrajectoryDots.timeStep",
+        description = "EnemyAimController.SetTrajectoryDots(Vector3,Vector3,float,float) (VA 0x47FB414): " +
+            "the IN-BATTLE aim guide. It asks TrajectoryController.GetTrajectorySegments2D for 60 " +
+            "ballistic points (mov w0,#0x3c at VA 0x47FB4F0) at timeStep 0.1s, converts them to an " +
+            "array (bl Enumerable.ToArray at VA 0x47FB500), then places the first N points into the " +
+            "pre-placed dot pool: the placement loop (VA 0x47FB528..0x47FB5C0) exits at " +
+            "i >= _trajectoryPointsParent.childCount (cmp/b.ge at VA 0x47FB538/0x47FB53C), so the " +
+            "visible guide covers only pool_size * 0.1s of flight - the pool, not the simulation, " +
+            "truncates the guide. Patch: the timeStep argument load (ldr s5,[x8,#0x128] at " +
+            "VA 0x47FB4E8, reading the shared 0.1f rodata slot) becomes fmov s5,#0.375, so the same " +
+            "pool spans 3.75x more flight time and the drawn guide reaches the ground impact point " +
+            "(dots past the impact point can extend slightly below terrain; the guide has no " +
+            "collision logic by design). The 0.1f rodata slot itself is shared by 41 call sites and " +
+            "is left untouched. Player-side only: SetTrajectoryDots is called only from " +
+            "EnemyAimController.FireSolution (bl at VA 0x47FAEA0) and " +
+            "RecalculateShotIfWouldHitHill (bl at VA 0x47FBC38), both driven by the player-controlled " +
+            "aiming turn; the enemy prediction path (PopulateEnemyPredictionTrajectories) is " +
+            "untouched.",
+        signature = hex(
+            "24 41 20 1E 06 41 20 1E 05 29 41 BD 94 4A 41 F9 " +
+                "80 07 80 52 E1 03 1F AA",
+        ),
+        patchOffset = 8,
+        expectedBytes = hex("05 29 41 BD"),
+        replacementBytes = hex("05 10 2B 1E"),
+    ),
+    NativeSite(
+        name = "aim.updateTrajectory.stepClamp",
+        description = "ProjectileController.UpdateTrajectory(float) (VA 0x44F765C): the guide builder " +
+            "for both the battle aim and the unit-upgrade preview (proven by device test: making " +
+            "this function return immediately removes both guides). The positioning loop places " +
+            "marker i (points Transform[], scene-baked count) at the simulated position for " +
+            "totalTime = i * dt, and dt is computed then clamped: fdiv at VA 0x44F788C, " +
+            "fcsel s3,s3,s0,gt at VA 0x44F7894 clamps dt to the 0.3f rodata maximum, " +
+            "fcsel s8,s2,s3,mi at VA 0x44F789C floors it at 0.02f. Guide length on screen = " +
+            "marker_count * dt seconds of flight, so the 0.3f clamp is the binding limiter. Patch: " +
+            "the floor/ceiling fcsel becomes fmov s8,#0.375, forcing dt = 0.375s per marker so the " +
+            "marker chain spans the full flight arc to the ground impact (0.5s was tested on " +
+            "device and overshot the terrain; 0.375 is the tuned value; markers past the impact " +
+            "point continue ballistically below terrain; the guide has no collision logic). The " +
+            "aim.updateTrajectory.arcCap NOP stays: with larger dt the 4.5f arc clamp would " +
+            "otherwise re-truncate the spline. Only the guide uses this dt; the live projectile " +
+            "simulation is separate code.",
+        signature = hex(
+            "63 CC 20 1E 00 20 22 1E 48 4C 23 1E " +
+                "28 36 00 B4 24 04 0C 6E",
+        ),
+        patchOffset = 8,
+        expectedBytes = hex("48 4C 23 1E"),
+        replacementBytes = hex("08 10 2B 1E"),
     ),
 )
