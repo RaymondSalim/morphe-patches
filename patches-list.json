@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.3.1-dev.2",
+  "version": "1.3.1-dev.3",
   "patches": [
     {
       "name": "Block ads (banner, interstitial & app open)",
@@ -285,51 +285,6 @@
             },
             {
               "version": "3.0.11",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "[DIAG] Disable guide renderers (temporary)",
-      "description": "Temporary diagnostic: makes ProjectileController.UpdateTrajectory and EnemyAimController.SetTrajectoryDots return immediately. Use to identify which function draws the visible aim guide; revert after the experiment.",
-      "default": true,
-      "dependencies": [
-        "BytecodePatch"
-      ],
-      "compatiblePackages": [
-        {
-          "packageName": "com.epicoro.castleclashers",
-          "name": "Castle Busters",
-          "description": null,
-          "apkFileType": "APKM",
-          "appIconColor": "#15516C",
-          "signatures": null,
-          "targets": [
-            {
-              "version": "1.17.2",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.epicoro.castleclashers",
-          "name": "Castle Busters",
-          "description": null,
-          "apkFileType": "APK",
-          "appIconColor": "#15516C",
-          "signatures": null,
-          "targets": [
-            {
-              "version": "1.17.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

@@ -1,3 +1,9 @@
+## [1.3.1-dev.3](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.1-dev.2...v1.3.1-dev.3) (2026-09-14)
+
+### 🐛 Bug Fixes
+
+* Force guide simulation step to 0.5s so the aim guide reaches the ground ([901686a](https://github.com/RaymondSalim/morphe-patches/commit/901686a70c9a385f59f1bee3be661fcc9fbe09e9))
+
 ## [1.3.1-dev.2](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.1-dev.1...v1.3.1-dev.2) (2026-09-14)
 
 ### 🐛 Bug Fixes
