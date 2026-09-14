@@ -1,3 +1,12 @@
+## [1.3.1-dev.2](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.1-dev.1...v1.3.1-dev.2) (2026-09-14)
+
+### 🐛 Bug Fixes
+
+* Add temporary guide renderer diagnostic patch ([121d80d](https://github.com/RaymondSalim/morphe-patches/commit/121d80dbdd4ac713cdbd323a9fa554af975c1b89))
+* Add temporary guide renderer diagnostic patch ([13be484](https://github.com/RaymondSalim/morphe-patches/commit/13be4844609fbb838596c45e78b22a27da614b59))
+* Add temporary guide renderer diagnostic patch ([e11028e](https://github.com/RaymondSalim/morphe-patches/commit/e11028e40dabdf5cc6583912fc1cf679a1382039))
+* Add temporary guide renderer diagnostic patch ([4321c8f](https://github.com/RaymondSalim/morphe-patches/commit/4321c8f06901918cc5ebdffbb2427fe7e2fa8e0e))
+
 ## [1.3.1-dev.1](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.0...v1.3.1-dev.1) (2026-09-14)
 
 ### 🐛 Bug Fixes
