@@ -17,7 +17,7 @@ val diagnosticSites = listOf(
         signature = hex(
             "FF C3 05 D1 EF 3B 0D 6D ED 33 0E 6D EB 2B 0F 6D " +
                 "E9 23 10 6D FD 7B 11 A9 FC 6F 12 A9 FA 67 13 A9 " +
-                "F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 E8 0F 17 A9",
+                "F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 08 40 20 1E",
         ),
         patchOffset = 0,
         expectedBytes = hex("FF C3 05 D1"),
