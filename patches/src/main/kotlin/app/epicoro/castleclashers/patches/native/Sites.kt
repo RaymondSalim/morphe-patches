@@ -207,8 +207,9 @@ val aimGuideSites = listOf(
             "fcsel s3,s3,s0,gt at VA 0x44F7894 clamps dt to the 0.3f rodata maximum, " +
             "fcsel s8,s2,s3,mi at VA 0x44F789C floors it at 0.02f. Guide length on screen = " +
             "marker_count * dt seconds of flight, so the 0.3f clamp is the binding limiter. Patch: " +
-            "the floor/ceiling fcsel becomes fmov s8,#0.5, forcing dt = 0.5s per marker so the " +
-            "marker chain spans the full flight arc to the ground impact (markers past the impact " +
+            "the floor/ceiling fcsel becomes fmov s8,#0.375, forcing dt = 0.375s per marker so the " +
+            "marker chain spans the full flight arc to the ground impact (0.5s was tested on " +
+            "device and overshot the terrain; 0.375 is the tuned value; markers past the impact " +
             "point continue ballistically below terrain; the guide has no collision logic). The " +
             "aim.updateTrajectory.arcCap NOP stays: with larger dt the 4.5f arc clamp would " +
             "otherwise re-truncate the spline. Only the guide uses this dt; the live projectile " +
@@ -219,6 +220,6 @@ val aimGuideSites = listOf(
         ),
         patchOffset = 8,
         expectedBytes = hex("48 4C 23 1E"),
-        replacementBytes = hex("08 10 2C 1E"),
+        replacementBytes = hex("08 10 2B 1E"),
     ),
 )
