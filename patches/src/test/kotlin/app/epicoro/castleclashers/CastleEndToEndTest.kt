@@ -1,7 +1,6 @@
 package app.epicoro.castleclashers
 
 import app.epicoro.castleclashers.patches.allPatches
-import app.epicoro.castleclashers.patches.diagnostic.diagnosticSites
 import app.epicoro.castleclashers.patches.native.Arm64Patcher
 import app.epicoro.castleclashers.patches.native.adsSites
 import app.epicoro.castleclashers.patches.native.aimGuideSites
@@ -36,7 +35,7 @@ class CastleEndToEndTest {
         val originalSo = ZipFile(inputApk).use { zf ->
             zf.getInputStream(zf.getEntry("lib/arm64-v8a/libil2cpp.so")).use { it.readBytes() }
         }
-        val allSites = adsSites + aimGuideSites + codeHashSites + diagnosticSites
+        val allSites = adsSites + aimGuideSites + codeHashSites
         assertTrue(allSites.isNotEmpty())
 
         Patcher(PatcherConfig(inputApk, File("build/cc-e2e-temp"))).use { patcher ->

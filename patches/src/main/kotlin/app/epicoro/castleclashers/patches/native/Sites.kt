@@ -197,4 +197,28 @@ val aimGuideSites = listOf(
         expectedBytes = hex("05 29 41 BD"),
         replacementBytes = hex("05 10 2B 1E"),
     ),
+    NativeSite(
+        name = "aim.updateTrajectory.stepClamp",
+        description = "ProjectileController.UpdateTrajectory(float) (VA 0x44F765C): the guide builder " +
+            "for both the battle aim and the unit-upgrade preview (proven by device test: making " +
+            "this function return immediately removes both guides). The positioning loop places " +
+            "marker i (points Transform[], scene-baked count) at the simulated position for " +
+            "totalTime = i * dt, and dt is computed then clamped: fdiv at VA 0x44F788C, " +
+            "fcsel s3,s3,s0,gt at VA 0x44F7894 clamps dt to the 0.3f rodata maximum, " +
+            "fcsel s8,s2,s3,mi at VA 0x44F789C floors it at 0.02f. Guide length on screen = " +
+            "marker_count * dt seconds of flight, so the 0.3f clamp is the binding limiter. Patch: " +
+            "the floor/ceiling fcsel becomes fmov s8,#0.5, forcing dt = 0.5s per marker so the " +
+            "marker chain spans the full flight arc to the ground impact (markers past the impact " +
+            "point continue ballistically below terrain; the guide has no collision logic). The " +
+            "aim.updateTrajectory.arcCap NOP stays: with larger dt the 4.5f arc clamp would " +
+            "otherwise re-truncate the spline. Only the guide uses this dt; the live projectile " +
+            "simulation is separate code.",
+        signature = hex(
+            "63 CC 20 1E 00 20 22 1E 48 4C 23 1E " +
+                "28 36 00 B4 24 04 0C 6E",
+        ),
+        patchOffset = 8,
+        expectedBytes = hex("48 4C 23 1E"),
+        replacementBytes = hex("08 10 2C 1E"),
+    ),
 )
