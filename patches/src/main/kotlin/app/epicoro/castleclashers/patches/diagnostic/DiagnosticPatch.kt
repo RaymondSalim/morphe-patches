@@ -7,7 +7,7 @@ import app.epicoro.castleclashers.patches.shared.Constants
 import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
-private val diagnosticSites = listOf(
+val diagnosticSites = listOf(
     NativeSite(
         name = "diag.updateTrajectory.ret",
         description = "DIAGNOSTIC, revert after the experiment: makes " +
