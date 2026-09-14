@@ -1,12 +1,14 @@
 package app.epicoro.castleclashers.patches.diagnostic
 
 import app.epicoro.castleclashers.patches.native.Arm64Patcher
+import app.epicoro.castleclashers.patches.native.NativeSite
+import app.epicoro.castleclashers.patches.native.hex
 import app.epicoro.castleclashers.patches.shared.Constants
 import app.hevy.patches.shared.preserveAppCode
 import app.morphe.patcher.patch.rawResourcePatch
 
 private val diagnosticSites = listOf(
-    app.epicoro.castleclashers.patches.native.NativeSite(
+    NativeSite(
         name = "diag.updateTrajectory.ret",
         description = "DIAGNOSTIC, revert after the experiment: makes " +
             "ProjectileController.UpdateTrajectory return immediately, which removes whatever " +
@@ -21,7 +23,7 @@ private val diagnosticSites = listOf(
         expectedBytes = hex("FF C3 05 D1"),
         replacementBytes = hex("C0 03 5F D6"),
     ),
-    app.epicoro.castleclashers.patches.native.NativeSite(
+    NativeSite(
         name = "diag.setTrajectoryDots.ret",
         description = "DIAGNOSTIC, revert after the experiment: makes " +
             "EnemyAimController.SetTrajectoryDots return immediately, removing the aim dots it " +
