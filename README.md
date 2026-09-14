@@ -32,7 +32,7 @@ The patches are version-locked to Castle Busters 1.17.2 and fail loudly on any o
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.3.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;5 patches total
+> **[v1.3.1-dev.1](https://github.com/RaymondSalim/morphe-patches/releases/tag/v1.3.1-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;5 patches total
 <details open>
 <summary>📦 Castle Busters&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>

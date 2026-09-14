@@ -1,3 +1,9 @@
+## [1.3.1-dev.1](https://github.com/RaymondSalim/morphe-patches/compare/v1.3.0...v1.3.1-dev.1) (2026-09-14)
+
+### 🐛 Bug Fixes
+
+* Extend in-battle aim guide via SetTrajectoryDots timeStep patch ([7f9f8d8](https://github.com/RaymondSalim/morphe-patches/commit/7f9f8d84bd47d6573e2abb2076a2d9a60e07de69))
+
 ## [1.3.0](https://github.com/RaymondSalim/morphe-patches/compare/v1.2.0...v1.3.0) (2026-09-13)
 
 ### 🐛 Bug Fixes
